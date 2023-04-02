@@ -8,7 +8,11 @@
  */
 
 // version code in format yymmddb (b = daily build)
+<<<<<<< HEAD
 #define VERSION 2303160
+=======
+#define VERSION 2303240
+>>>>>>> af44730418553f70d05de666a9041130d906e1ab
 
 //uncomment this if you have a "my_config.h" file you'd like to use
 //#define WLED_USE_MY_CONFIG
@@ -492,12 +496,13 @@ WLED_GLOBAL bool wasConnected _INIT(false);
 WLED_GLOBAL byte lastRandomIndex _INIT(0);        // used to save last random color so the new one is not the same
 
 // transitions
-WLED_GLOBAL bool          transitionActive       _INIT(false);
-WLED_GLOBAL uint16_t      transitionDelayDefault _INIT(transitionDelay); // default transition time (storec in cfg.json)
-WLED_GLOBAL uint16_t      transitionDelayTemp    _INIT(transitionDelay); // actual transition duration (overrides transitionDelay in certain cases)
+WLED_GLOBAL bool          transitionActive        _INIT(false);
+WLED_GLOBAL uint16_t      transitionDelayDefault  _INIT(transitionDelay); // default transition time (storec in cfg.json)
+WLED_GLOBAL uint16_t      transitionDelayTemp     _INIT(transitionDelay); // actual transition duration (overrides transitionDelay in certain cases)
 WLED_GLOBAL unsigned long transitionStartTime;
-WLED_GLOBAL float         tperLast               _INIT(0.0f);            // crossfade transition progress, 0.0f - 1.0f
-WLED_GLOBAL bool          jsonTransitionOnce     _INIT(false);           // flag to override transitionDelay (playlist, JSON API: "live" & "seg":{"i"} & "tt")
+WLED_GLOBAL float         tperLast                _INIT(0.0f);            // crossfade transition progress, 0.0f - 1.0f
+WLED_GLOBAL bool          jsonTransitionOnce      _INIT(false);           // flag to override transitionDelay (playlist, JSON API: "live" & "seg":{"i"} & "tt")
+WLED_GLOBAL uint8_t       randomPaletteChangeTime _INIT(5);               // amount of time [s] between random palette changes (min: 1s, max: 255s)
 
 // nightlight
 WLED_GLOBAL bool nightlightActive _INIT(false);
