@@ -431,6 +431,8 @@ void handleSettingsSet(AsyncWebServerRequest *request, byte subPage)
   {
     if (request->hasArg(F("RS"))) //complete factory reset
     {
+      HKStore::get_instance().reset();
+
       WLED_FS.format();
       #ifdef WLED_ADD_EEPROM_SUPPORT
       clearEEPROM();

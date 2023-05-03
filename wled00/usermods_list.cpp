@@ -185,6 +185,10 @@
 #include "../usermods/pwm_outputs/usermod_pwm_outputs.h"
 #endif
 
+#ifdef USERMOD_BUTTON
+  #include "../usermods/usermod_v2_button/usermod_v2_button.h"
+#endif
+
 
 void registerUsermods()
 {
@@ -348,5 +352,9 @@ void registerUsermods()
 
   #ifdef USERMOD_SHT
   usermods.add(new ShtUsermod());
+  #endif
+
+  #ifdef USERMOD_BUTTON
+  usermods.add(new ButtonUsermod());
   #endif
 }

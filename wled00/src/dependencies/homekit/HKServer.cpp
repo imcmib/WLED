@@ -228,4 +228,8 @@ void HKServer::add_device(HKDevice * new_device) {
     device_callback = new_device;
 }
 
+void HKServer::remove_device() {
+    device_callback = nullptr;
+}
+
 #endif

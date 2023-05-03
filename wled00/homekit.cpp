@@ -50,11 +50,15 @@ void updateOn(bool on) {
 }
 
 void updateBrightness(int brightness) {
-        bri = map(brightness, 0, 100, 0, UINT8_MAX);
-        stateUpdated(CALL_MODE_HOMEKIT);
+    bri = map(brightness, 0, 100, 0, UINT8_MAX);
+    stateUpdated(CALL_MODE_HOMEKIT);
 }
 
 void updateColor(double hue, double sat) {
+    effectCurrent = 0;
+    stateChanged = true;
+    colorUpdated(CALL_MODE_BUTTON);
+
     byte rgb[4] {0};
     uint16_t hueMapped = map(hue, 0, 360, 0, UINT16_MAX);
     uint8_t satMapped = map(sat, 0, 100, 0, UINT8_MAX);

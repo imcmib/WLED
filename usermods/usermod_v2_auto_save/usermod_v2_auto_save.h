@@ -58,7 +58,7 @@ class AutoSaveUsermod : public Usermod {
     uint8_t knownEffectSpeed = 0;
     uint8_t knownEffectIntensity = 0;
     uint8_t knownMode = 0;
-    uint8_t knownPalette = 0;
+    uint8_t knownPalette = 11; // rainbow
 
     #ifdef USERMOD_FOUR_LINE_DISPLAY
     FourLineDisplayUsermod* display;

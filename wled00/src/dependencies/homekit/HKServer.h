@@ -40,6 +40,7 @@ public:
   void poll();
   void reconnect();
   void add_device(HKDevice * new_device);
+  void remove_device();
 };
 
 #endif

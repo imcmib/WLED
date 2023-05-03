@@ -76,6 +76,8 @@ public:
   HKStore &operator=(HKStore &&) noexcept = default;
   static HKStore& get_instance();
 
+  void reset();
+
   // LightBulb
   void set_lightbulb_values(bool on, uint16_t hue, uint8_t sat, uint8_t bri);
   void get_lightbulb_values(bool * on, int * hue, int * sat, int * bri);

@@ -66,17 +66,17 @@ HKStore::HKStore() {
     // Create accessory info service. Must have an ID of 1.
     HKService *accessory_info_service = new HKService(1, AccessoryInfoServiceType, "AccessoryInformation");
     // Name Characteristic
-    accessory_info_service->addCharacteristic(new HAPCharacteristic(2, "Name", "23", CharPerms::PR, "WLED Light"));
+    accessory_info_service->addCharacteristic(new HAPCharacteristic(2, "Name", "23", CharPerms::PR, "Lumilamp"));
     // Manufacturer Characteristic
-    accessory_info_service->addCharacteristic(new HAPCharacteristic(3, "Manufacturer", "20", CharPerms::PR, "WLED"));
+    accessory_info_service->addCharacteristic(new HAPCharacteristic(3, "Manufacturer", "20", CharPerms::PR, "Lumilamp"));
     // SerialNumber Characteristic
-    accessory_info_service->addCharacteristic(new HAPCharacteristic(4, "SerialNumber", "30", CharPerms::PR, "WLED-001"));
+    accessory_info_service->addCharacteristic(new HAPCharacteristic(4, "SerialNumber", "30", CharPerms::PR, "Lumilamp-001"));
     // Model Characteristic
-    accessory_info_service->addCharacteristic(new HAPCharacteristic(5, "Model", "21", CharPerms::PR, "WLED-Device"));
+    accessory_info_service->addCharacteristic(new HAPCharacteristic(5, "Model", "21", CharPerms::PR, "Lumilamp"));
     // Identity Characteristic
     accessory_info_service->addCharacteristic(new HAPCharacteristic(6, "Identify", "14", CharPerms::PW, CharFormat::BOOL, true));
     // FirmwareRevision Characteristic
-    accessory_info_service->addCharacteristic(new HAPCharacteristic(7, "FirmwareRevision", "52", CharPerms::PR, "0.0.1"));
+    accessory_info_service->addCharacteristic(new HAPCharacteristic(7, "FirmwareRevision", "52", CharPerms::PR, "1.0.0"));
 
     // Craate ProtocolInfo service
     HKService *protocol_info_service = new HKService(8, ProtocolInfoServiceType, "HAPProtocolInformation");
@@ -102,6 +102,10 @@ HKStore::HKStore() {
     srp.generate_verifier(HK_PAIRING_CODE);
 
     pair_status = pairState_M1;
+}
+
+void HKStore::reset() {
+    nvs_erase_all(hk_store_handle);
 }
 
 // LightBulb
