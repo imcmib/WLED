@@ -12,9 +12,9 @@
 // CONFIG
 
 #define CONFIG_ID 1  // If characteristics change, update this + 1
-#define CONFIG_MODEL_NAME "WLED-ESP32"
-#define CONFIG_DISPLAY_NAME "WLED Server"  // change with optional second argument in homeSpan.begin()
-#define CONFIG_HOST_NAME "WLED-LED"
+#define CONFIG_MODEL_NAME "Lumilamp"
+#define CONFIG_DISPLAY_NAME "Lumi Server"  // change with optional second argument in homeSpan.begin()
+#define CONFIG_HOST_NAME "Lumi-LED"
 #define CONFIG_HOST_NAME_SUFFIX "ESP32"
 
 bool HKServer::begin() {
