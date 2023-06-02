@@ -8,7 +8,7 @@
  */
 
 // version code in format yymmddb (b = daily build)
-#define VERSION 2305280
+#define VERSION 2306020
 
 //uncomment this if you have a "my_config.h" file you'd like to use
 //#define WLED_USE_MY_CONFIG
@@ -183,6 +183,10 @@ using PSRAMDynamicJsonDocument = BasicJsonDocument<PSRAM_Allocator>;
   #define CLIENT_PASS ""
 #endif
 
+#ifndef MDNS_NAME
+  #define MDNS_NAME DEFAULT_MDNS_NAME
+#endif
+
 #if defined(WLED_AP_PASS) && !defined(WLED_AP_SSID)
   #error WLED_AP_PASS is defined but WLED_AP_SSID is still the default. \
          Please change WLED_AP_SSID to something unique.
@@ -293,7 +297,7 @@ WLED_GLOBAL char ntpServerName[33] _INIT("0.wled.pool.ntp.org");   // NTP server
 // WiFi CONFIG (all these can be changed via web UI, no need to set them here)
 WLED_GLOBAL char clientSSID[33] _INIT(CLIENT_SSID);
 WLED_GLOBAL char clientPass[65] _INIT(CLIENT_PASS);
-WLED_GLOBAL char cmDNS[33] _INIT("x");                             // mDNS address (placeholder, is replaced by wledXXXXXX.local)
+WLED_GLOBAL char cmDNS[33] _INIT(MDNS_NAME);                       // mDNS address (*.local, replaced by wledXXXXXX if default is used)
 WLED_GLOBAL char apSSID[33] _INIT("");                             // AP off by default (unless setup)
 WLED_GLOBAL byte apChannel _INIT(1);                               // 2.4GHz WiFi AP channel (1-13)
 WLED_GLOBAL byte apHide    _INIT(0);                               // hidden AP SSID
