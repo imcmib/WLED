@@ -183,7 +183,7 @@ class HAPCharacteristic {
         }
 
         internalSet(value, val);
-        EHK_DEBUGF("Updating value for %s\n", hapName);
+        EHK_DEBUGF("Updating value for %s => %s\n", hapName, String(val));
     }
 
     void setString(const char *val) {

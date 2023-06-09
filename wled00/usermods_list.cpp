@@ -193,6 +193,10 @@
   #include "../usermods/usermod_v2_button/usermod_v2_button.h"
 #endif
 
+#ifdef USERMOD_MATRIX_ANIMATIONS
+  #include "../usermods/usermod_v2_matrix_animations/usermod_v2_matrix_animations.h"
+#endif
+
 
 void registerUsermods()
 {
@@ -364,5 +368,9 @@ void registerUsermods()
 
   #ifdef USERMOD_BUTTON
   usermods.add(new ButtonUsermod());
+  #endif
+
+  #ifdef USERMOD_MATRIX_ANIMATIONS
+  usermods.add(new MatrixAnimationsUsermod());
   #endif
 }

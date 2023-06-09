@@ -133,6 +133,7 @@
 #define USERMOD_ID_PWM_OUTPUTS           38     //Usermod "usermod_pwm_outputs.h
 #define USERMOD_ID_SHT                   39     //Usermod "usermod_sht.h
 #define USERMOD_ID_KLIPPER               40     // Usermod Klipper percentage
+#define USERMOD_ID_MATRIX_ANIMATIONS     98     //Usermod "usermod_v2_button.h"
 #define USERMOD_ID_BUTTON                99     //Usermod "usermod_v2_button.h"
 
 //Access point behavior
