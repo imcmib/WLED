@@ -126,6 +126,23 @@ bool deserializeConfig(JsonObject doc, bool fromFS) {
       strip.panel.push_back(p);
     }
     // cannot call strip.setUpMatrix() here due to already locked JSON buffer
+  } else {
+    #ifdef IS_MATRIX
+      strip.isMatrix = true;
+      strip.panel.clear();
+      strip.panels = 1;
+
+      WS2812FX::Panel p;
+      p.height = p.width = MATRIX_SIZE;
+      p.xOffset = p.yOffset = 0;
+      p.options = 0;
+      p.bottomStart = 1;
+      p.rightStart = 0;
+      p.vertical = 0;
+      p.serpentine = 1;
+
+      strip.panel.push_back(p);
+    #endif
   }
   #endif
 

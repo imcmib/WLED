@@ -72,6 +72,9 @@ void WLED::loop()
   #ifndef WLED_DISABLE_ALEXA
   handleAlexa();
   #endif
+  #if !defined(WLED_DISABLE_HOMEKIT) && defined(ARDUINO_ARCH_ESP32)
+  handleHomeKit();
+  #endif
 
   if (doCloseFile) {
     closeFile();
@@ -423,7 +426,7 @@ void WLED::setup()
   #endif
 
   // fill in unique mdns default
-  if (strcmp(cmDNS, "x") == 0) sprintf_P(cmDNS, PSTR("wled-%*s"), 6, escapedMac.c_str() + 6);
+  if (strcmp(cmDNS, "x") == 0) sprintf_P(cmDNS, PSTR("lumi-%*s"), 6, escapedMac.c_str() + 6);
 #ifndef WLED_DISABLE_MQTT
   if (mqttDeviceTopic[0] == 0) sprintf_P(mqttDeviceTopic, PSTR("wled/%*s"), 6, escapedMac.c_str() + 6);
   if (mqttClientID[0] == 0)    sprintf_P(mqttClientID, PSTR("WLED-%*s"), 6, escapedMac.c_str() + 6);
@@ -716,6 +719,10 @@ void WLED::initInterfaces()
   // init Alexa hue emulation
   if (alexaEnabled)
     alexaInit();
+#endif
+
+#if !defined(WLED_DISABLE_HOMEKIT) && defined(ARDUINO_ARCH_ESP32)
+  homekitInit();
 #endif
 
 #ifndef WLED_DISABLE_OTA

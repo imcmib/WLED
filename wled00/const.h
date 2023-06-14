@@ -133,6 +133,8 @@
 #define USERMOD_ID_PWM_OUTPUTS           38     //Usermod "usermod_pwm_outputs.h
 #define USERMOD_ID_SHT                   39     //Usermod "usermod_sht.h
 #define USERMOD_ID_KLIPPER               40     // Usermod Klipper percentage
+#define USERMOD_ID_MATRIX_ANIMATIONS     98     //Usermod "usermod_v2_button.h"
+#define USERMOD_ID_BUTTON                99     //Usermod "usermod_v2_button.h"
 
 //Access point behavior
 #define AP_BEHAVIOR_BOOT_NO_CONN          0     //Open AP when no connection after boot
@@ -154,6 +156,8 @@
 #define CALL_MODE_ALEXA         10
 #define CALL_MODE_WS_SEND       11     //special call mode, not for notifier, updates websocket only
 #define CALL_MODE_BUTTON_PRESET 12     //button/IR JSON preset/macro
+#define CALL_MODE_HOMEKIT       13
+#define CALL_MODE_USERMODE      14
 
 //RGB to RGBW conversion mode
 #define RGBW_MODE_MANUAL_ONLY     0    // No automatic white channel calculation. Manual white channel slider
