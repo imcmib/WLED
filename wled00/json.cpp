@@ -11,6 +11,7 @@
 #define JSON_PATH_PALETTES   5
 #define JSON_PATH_FXDATA     6
 #define JSON_PATH_NETWORKS   7
+#define JSON_PATH_EFFECTS    8
 
 /*
  * JSON API (De)serialization
@@ -821,7 +822,7 @@ void setPaletteColors(JsonArray json, byte* tcp)
     }
 }
 
-void serializePalettes(JsonObject root, AsyncWebServerRequest* request)
+void serializePalettes(JsonObject root, int page)
 {
   byte tcp[72];
   #ifdef ESP8266
@@ -829,11 +830,6 @@ void serializePalettes(JsonObject root, AsyncWebServerRequest* request)
   #else
   int itemPerPage = 8;
   #endif
-
-  int page = 0;
-  if (request->hasParam("page")) {
-    page = request->getParam("page")->value().toInt();
-  }
 
   int palettesCount = strip.getPaletteCount();
   int customPalettes = strip.customPalettes.size();
@@ -1010,29 +1006,16 @@ void serveJson(AsyncWebServerRequest* request)
   else if (url.indexOf("info")  > 0) subJson = JSON_PATH_INFO;
   else if (url.indexOf("si")    > 0) subJson = JSON_PATH_STATE_INFO;
   else if (url.indexOf("nodes") > 0) subJson = JSON_PATH_NODES;
+  else if (url.indexOf("eff")   > 0) subJson = JSON_PATH_EFFECTS;
   else if (url.indexOf("palx")  > 0) subJson = JSON_PATH_PALETTES;
   else if (url.indexOf("fxda")  > 0) subJson = JSON_PATH_FXDATA;
-  else if (url.indexOf("net") > 0) subJson = JSON_PATH_NETWORKS;
+  else if (url.indexOf("net")   > 0) subJson = JSON_PATH_NETWORKS;
   #ifdef WLED_ENABLE_JSONLIVE
   else if (url.indexOf("live")  > 0) {
     serveLiveLeds(request);
     return;
   }
   #endif
-  else if (url.indexOf(F("eff")) > 0) {
-    // this serves just effect names without FX data extensions in names
-    if (requestJSONBufferLock(19)) {
-      AsyncJsonResponse* response = new AsyncJsonResponse(&doc, true);  // array document
-      JsonArray lDoc = response->getRoot();
-      serializeModeNames(lDoc); // remove WLED-SR extensions from effect names
-      response->setLength();
-      request->send(response);
-      releaseJSONBufferLock();
-    } else {
-      request->send(503, "application/json", F("{\"error\":3}"));
-    }
-    return;
-  }
   else if (url.indexOf("pal") > 0) {
     request->send_P(200, "application/json", JSON_palette_names);
     return;
@@ -1049,7 +1032,7 @@ void serveJson(AsyncWebServerRequest* request)
     request->send(503, "application/json", F("{\"error\":3}"));
     return;
   }
-  AsyncJsonResponse *response = new AsyncJsonResponse(&doc, subJson==6);
+  AsyncJsonResponse *response = new AsyncJsonResponse(&doc, subJson==JSON_PATH_FXDATA || subJson==JSON_PATH_EFFECTS); // will clear and convert JsonDocument into JsonArray if necessary
 
   JsonVariant lDoc = response->getRoot();
 
@@ -1062,9 +1045,11 @@ void serveJson(AsyncWebServerRequest* request)
     case JSON_PATH_NODES:
       serializeNodes(lDoc); break;
     case JSON_PATH_PALETTES:
-      serializePalettes(lDoc, request); break;
+      serializePalettes(lDoc, request->hasParam("page") ? request->getParam("page")->value().toInt() : 0); break;
+    case JSON_PATH_EFFECTS:
+      serializeModeNames(lDoc); break;
     case JSON_PATH_FXDATA:
-      serializeModeData(lDoc.as<JsonArray>()); break;
+      serializeModeData(lDoc); break;
     case JSON_PATH_NETWORKS:
       serializeNetworks(lDoc); break;
     default: //all
@@ -1083,7 +1068,9 @@ void serveJson(AsyncWebServerRequest* request)
 
   DEBUG_PRINTF("JSON buffer size: %u for request: %d\n", lDoc.memoryUsage(), subJson);
 
-  response->setLength();
+  size_t len = response->setLength();
+  DEBUG_PRINT(F("JSON content length: ")); DEBUG_PRINTLN(len);
+
   request->send(response);
   releaseJSONBufferLock();
 }

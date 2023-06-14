@@ -195,9 +195,11 @@ void initServer()
     JsonObject root = doc.as<JsonObject>();
     if (error || root.isNull()) {
       releaseJSONBufferLock();
-      request->send(400, "application/json", F("{\"error\":9}"));
+      request->send(400, "application/json", F("{\"error\":9}")); // ERR_JSON
       return;
     }
+    if (root.containsKey("pin")) checkSettingsPIN(root["pin"].as<const char*>());
+
     const String& url = request->url();
     isConfig = url.indexOf("cfg") > -1;
     if (!isConfig) {
@@ -210,6 +212,11 @@ void initServer()
       */
       verboseResponse = deserializeState(root);
     } else {
+      if (!correctPIN && strlen(settingsPIN)>0) {
+        request->send(403, "application/json", F("{\"error\":1}")); // ERR_DENIED
+        releaseJSONBufferLock();
+        return;
+      }
       verboseResponse = deserializeConfig(root); //use verboseResponse to determine whether cfg change should be saved immediately
     }
     releaseJSONBufferLock();
@@ -577,7 +584,7 @@ void serveSettings(AsyncWebServerRequest* request, bool post)
   }
 
   // if OTA locked or too frequent PIN entry requests fail hard
-  if ((subPage == 1 && wifiLock && otaLock) || (post && !correctPIN && millis()-lastEditTime < 3000))
+  if ((subPage == 1 && wifiLock && otaLock) || (post && !correctPIN && millis()-lastEditTime < PIN_RETRY_COOLDOWN))
   {
     serveMessage(request, 500, "Access Denied", FPSTR(s_unlock_ota), 254); return;
   }
@@ -601,17 +608,14 @@ void serveSettings(AsyncWebServerRequest* request, bool post)
       case 252: strcpy_P(s, correctPIN ? PSTR("PIN accepted") : PSTR("PIN rejected")); break;
     }
 
-    if (subPage == 252) {
-      createEditHandler(correctPIN);
-    } else
-      strcat_P(s, PSTR(" settings saved."));
+    if (subPage != 252) strcat_P(s, PSTR(" settings saved."));
 
     if (subPage == 252 && correctPIN) {
       subPage = originalSubPage; // on correct PIN load settings page the user intended
     } else {
       if (!s2[0]) strcpy_P(s2, s_redirecting);
 
-      serveMessage(request, 200, s, s2, (subPage == 1 || (subPage == 6 && doReboot)) ? 129 : (correctPIN ? 1 : 3));
+      serveMessage(request, 200, s, s2, (subPage == 1 || ((subPage == 6 || subPage == 8) && doReboot)) ? 129 : (correctPIN ? 1 : 3));
       return;
     }
   }

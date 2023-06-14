@@ -324,7 +324,8 @@
 
 // WLED Error modes
 #define ERR_NONE         0  // All good :)
-#define ERR_EEP_COMMIT   2  // Could not commit to EEPROM (wrong flash layout?)
+#define ERR_DENIED       1  // Permission denied
+#define ERR_EEP_COMMIT   2  // Could not commit to EEPROM (wrong flash layout?) OBSOLETE
 #define ERR_NOBUF        3  // JSON buffer was not released in time, request cannot be handled at this time
 #define ERR_JSON         9  // JSON parsing failed (input too large?)
 #define ERR_FS_BEGIN    10  // Could not init filesystem (no partition?)
@@ -446,7 +447,10 @@
   #define DEFAULT_LED_COUNT 30
 #endif
 
-#define INTERFACE_UPDATE_COOLDOWN 2000 //time in ms to wait between websockets, alexa, and MQTT updates
+#define INTERFACE_UPDATE_COOLDOWN 2000 // time in ms to wait between websockets, alexa, and MQTT updates
+
+#define PIN_RETRY_COOLDOWN   3000 // time in ms after an incorrect attempt PIN and OTA pass will be rejected even if correct
+#define PIN_TIMEOUT        900000 // time in ms after which the PIN will be required again, 15 minutes
 
 // HW_PIN_SCL & HW_PIN_SDA are used for information in usermods settings page and usermods themselves
 // which GPIO pins are actually used in a hardwarea layout (controller board)
